@@ -86,56 +86,6 @@ namespace TI3
             Console.WriteLine($"The private key is ({e}, {n})");
         }
 
-        private static void Encrypt()
-        {
-            Console.WriteLine("Enter e");
-            var e = BigInteger.Parse(Console.ReadLine());
-
-            Console.WriteLine("Enter n");
-            var n = BigInteger.Parse(Console.ReadLine());
-
-            Console.WriteLine("Enter the message to encrypt");
-            string message = Console.ReadLine();
-            var msg = new BigInteger(Encoding.ASCII.GetBytes(message));
-
-            if (msg >= n)
-            {
-                Console.WriteLine("Error: Message isn't less than n");
-                return;
-            }
-
-            msg = fastexp(msg, e, n);
-
-            Console.WriteLine("The encrypted message:");
-            Console.Write(msg);
-            Console.WriteLine('|');
-        }
-
-        private static void Decrypt()
-        {
-            Console.WriteLine("Enter d");
-            var d = BigInteger.Parse(Console.ReadLine());
-
-            Console.WriteLine("Enter n");
-            var n = BigInteger.Parse(Console.ReadLine());
-
-            Console.WriteLine("Enter the message to decrypt");
-            string message = Console.ReadLine();
-            var msg = BigInteger.Parse(message);
-
-            if (msg >= n)
-            {
-                Console.WriteLine("Error: Message isn't less than n");
-                return;
-            }
-
-            msg = fastexp(msg, d, n);
-
-            Console.WriteLine("The decrypted message:");
-            Console.Write(Encoding.ASCII.GetString(msg.ToByteArray()));
-            Console.WriteLine('|');
-        }
-
         private static BigInteger LetterAsNum(char c)
         {
             return c - 'а' + 1;
@@ -157,10 +107,10 @@ namespace TI3
 
         private static void SignMessage()
         {
-            Console.WriteLine("Enter e");
+            Console.WriteLine("Enter e:");
             var e = BigInteger.Parse(Console.ReadLine());
 
-            Console.WriteLine("Enter n");
+            Console.WriteLine("Enter n:");
             var n = BigInteger.Parse(Console.ReadLine());
 
             Console.WriteLine("Enter the message:");
@@ -177,7 +127,30 @@ namespace TI3
 
         private static void CheckMessage()
         {
-            
+            Console.WriteLine("Enter d:");
+            var d = BigInteger.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter n:");
+            var n = BigInteger.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter the message:");
+            string message = Console.ReadLine();
+
+            Console.WriteLine("Enter the signature:");
+            var signature = BigInteger.Parse(Console.ReadLine());
+
+            BigInteger computedHash = Hash(message, n);
+
+            Console.WriteLine("The computed hash is " + computedHash);
+
+            BigInteger hash = fastexp(signature, d, n);
+
+            Console.WriteLine("The correct hash is " + hash);
+
+            if (hash.Equals(computedHash))
+                Console.WriteLine("The message is valid");
+            else
+                Console.WriteLine("The message is invalid");
         }
 
         public static void Main()
