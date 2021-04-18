@@ -136,15 +136,48 @@ namespace TI3
             Console.WriteLine('|');
         }
 
+        private static BigInteger LetterAsNum(char c)
+        {
+            return c - 'а' + 1;
+        }
+
+        private static BigInteger Hash(string s, BigInteger n)
+        {
+            BigInteger hash = 100;
+
+            s = s.ToLower();
+
+            for (int i = 0; i < s.Length; ++i)
+            {
+                hash = fastexp(hash + LetterAsNum(s[i]), 2, n);
+            }
+
+            return hash;
+        }
+
         private static void SignMessage()
         {
+            Console.WriteLine("Enter e");
+            var e = BigInteger.Parse(Console.ReadLine());
 
+            Console.WriteLine("Enter n");
+            var n = BigInteger.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter the message:");
+            string message = Console.ReadLine();
+
+            BigInteger hash = Hash(message, n);
+
+            Console.WriteLine("The hash is " + hash);
+
+            BigInteger signature = fastexp(hash, e, n);
+
+            Console.WriteLine("The signature is " + signature);
         }
 
         private static void CheckMessage()
         {
             
-
         }
 
         public static void Main()
